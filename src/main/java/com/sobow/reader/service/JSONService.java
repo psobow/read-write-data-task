@@ -24,21 +24,10 @@ public class JSONService {
     
     public void savePostsToFiles() {
         initDirectory();
-        
         List<PostDto> posts = client.getPosts();
-        
         log.info("Creating files under: " + "\"" + postsPathFromRepoRoot + "\"");
         for (PostDto post : posts) {
-            String fileName = postsPathFromRepoRoot + post.getId() + ".json";
-            File tempFile = new File(fileName);
-            try {
-                tempFile.createNewFile();
-                try (FileWriter writer = new FileWriter(tempFile)) {
-                    writer.write(gson.toJson(post));
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            writePostToFile(post);
         }
     }
     
@@ -52,5 +41,18 @@ public class JSONService {
         Arrays.stream(directory.listFiles())
               .forEach(File::delete);
         log.debug("Deleting all files in: " + postsPathFromRepoRoot);
+    }
+    
+    private void writePostToFile(PostDto postDto) {
+        String fileName = postsPathFromRepoRoot + postDto.getId() + ".json";
+        File tempFile = new File(fileName);
+        try {
+            tempFile.createNewFile();
+            try (FileWriter writer = new FileWriter(tempFile)) {
+                writer.write(gson.toJson(postDto));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
