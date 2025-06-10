@@ -1,9 +1,6 @@
 package com.sobow.reader;
 
-import com.google.gson.Gson;
-import com.sobow.reader.client.JSONPlaceholderClient;
-import com.sobow.reader.dto.PostDto;
-import java.util.List;
+import com.sobow.reader.service.JSONService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -15,8 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 public class JsonReaderApplication implements CommandLineRunner {
 	
-	private final JSONPlaceholderClient client;
-	private final Gson gson;
+	private final JSONService jsonService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(JsonReaderApplication.class, args);
@@ -24,10 +20,7 @@ public class JsonReaderApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		List<PostDto> response = client.getPosts();
-		log.debug(response.get(0).toString());
-		
-		String jsonString = gson.toJson(response.get(0));
-		System.out.println("\n" + jsonString);
+		jsonService.savePostsToFiles();
+		System.exit(0);
 	}
 }
