@@ -33,10 +33,9 @@ public class JSONService {
             File tempFile = new File(fileName);
             try {
                 tempFile.createNewFile();
-                
-                FileWriter writer = new FileWriter(tempFile);
-                writer.write(gson.toJson(post));
-                writer.close();
+                try (FileWriter writer = new FileWriter(tempFile)) {
+                    writer.write(gson.toJson(post));
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
